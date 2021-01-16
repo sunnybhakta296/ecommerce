@@ -1,0 +1,92 @@
+<html>
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <div id="products"></div>
+
+<form >
+    <p>FullName<input type="text" required id="fullName"></p>
+    <p>Address: <input required id="address"></p>
+    <p>Mobile: <input required id="mobile"></p>
+    <p>PinCode: <input type="pinCode" required id="pinCode"></p>
+    <p>City: <input type="city" required id="city"></p>
+    <p>State: <input type="state" required id="state"></p>
+    <p>Country: <input type="country" required id="country"></p>
+    <input type="submit" id="orderNow" value="Order Now">
+  </form>
+</body>
+
+<script>
+    let orderArray = [];
+    const produts = [
+        {
+            id: "5f155211c484bf092c135392",
+            name: "Pen",
+        },
+        {
+            id: "5f155211c484bf092c135393",
+            name: "Notebook",
+        },
+    ];
+
+    function updateCart(element) {
+        const productId = element.getAttribute("data-productid");
+        const quantity = $(`#product-${productId} .quantity`).val();
+        const productName = element.getAttribute("data-product");
+
+        orderArray.push({
+            productId: productId,
+            quantity: quantity,
+            name: productName,
+        });
+    }
+
+    produts.forEach((product) => {
+        $("#products").append(
+            `<div id="product-${product.id}"><p>Name: ${product.name}</p><p>Quantity: <input class="quantity" type="number" min=1 value=1></p></p><input data-product=${product.name} data-productid="${product.id}" type="button" value="Add to cart" onClick=updateCart(this)></p></div>`
+        );
+    });
+
+    $("#orderNow").click(function (event) {
+        event.preventDefault()
+        var requestOptions = {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                products: orderArray,
+                address: {
+                    fullName: $("#fullName").val(),
+                    address: $("#address").val(),
+                    mobile: $("#mobile").val(),
+                    pinCode: $("#pinCode").val(),
+                    city: $("#city").val(),
+                    state: $("#state").val(),
+                    country: $("#country").val(),
+                }
+            })
+        }
+
+
+        async function call() {
+            try {
+                var result = await fetch("/order/create", requestOptions);
+                data = await result.json()
+                if (result && result.status === 200) { alert("success") } else {
+                    alert(data.error)
+                }
+
+            } catch (e) {
+                alert(e)
+            }
+
+        }
+
+        call()
+
+    })
+</script>
+
+</html>

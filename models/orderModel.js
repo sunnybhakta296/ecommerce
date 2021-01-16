@@ -10,10 +10,9 @@ const statusEnum = [
 ];
 
 const OrderSchema = new Schema({
-  userId: { type: Schema.ObjectId, ref: "User" },
-  status: { type: String, enum: statusEnum, required: true },
+  status: { type: String, enum: statusEnum, required: true, default: Constant.new },
   product: {
-    id: { type: Schema.ObjectId, ref: "Product" },
+    productId: { type: Schema.ObjectId, ref: "Product" },
     name: { type: String, required: true },
     quantity: { type: Number, required: true },
   },
