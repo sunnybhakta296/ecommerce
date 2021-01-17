@@ -52,6 +52,10 @@
 
     $("#orderNow").click(function (event) {
         event.preventDefault()
+        if (!orderArray.length){
+            alert("Add product, product is missing")
+            return
+        }
         var requestOptions = {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -70,7 +74,7 @@
         }
 
 
-        async function call() {
+        async function addOrder() {
             try {
                 var result = await fetch("/order/create", requestOptions);
                 data = await result.json()
@@ -84,7 +88,7 @@
 
         }
 
-        call()
+        addOrder()
 
     })
 </script>

@@ -14,7 +14,6 @@ class OrderController {
       state,
       country,
     } = req.body.address;
-console.log(req.body)
     if (
       !fullName ||
       !address ||
